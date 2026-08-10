@@ -36,7 +36,18 @@
     width:400px; min-width:400px; background:#fff; border-right:1px solid #e2ddd4;
     overflow-y:auto; padding:24px 22px 60px;
   }
-  .stage { flex:1; overflow-y:auto; display:flex; flex-direction:column; align-items:center; padding:28px 20px 80px; }
+  .stage { flex:1; overflow:auto; display:flex; flex-direction:column; align-items:center; padding:16px 20px 80px; }
+  .stage.zoomed { align-items:flex-start; }
+  .stage.zoomed > div { align-items:flex-start !important; }
+  .pv-zoom { position:sticky; top:0; left:0; z-index:5; display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.92); border:1px solid #e2ddd4; border-radius:12px; padding:8px 14px;
+    box-shadow:0 4px 14px rgba(60,45,20,.1); margin-bottom:14px; }
+  .pv-zoom span { font-size:12px; font-weight:700; color:#7a705c; }
+  .pv-zoom button { width:30px; height:30px; border:1px solid #ddd4c4; background:#fff; border-radius:8px;
+    font-size:15px; font-weight:700; color:#7a705c; cursor:pointer; font-family:inherit; }
+  .pv-zoom button:hover { background:#f3ede1; }
+  .pv-zoom button.fitb { width:auto; padding:0 12px; font-size:12px; }
+  .pv-zoom b { font-size:13px; color:#8a7040; min-width:44px; text-align:center; }
 
   .brand { font-size:19px; font-weight:800; letter-spacing:-0.5px; margin-bottom:2px; }
   .brand span{ color:#c9a86a; }
@@ -245,8 +256,6 @@
 
   #pageKTop { position:relative; width:1920px; height:1785px; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
   .kt-hero { left:0; top:0; width:1920px; height:560px; }
-  .kt-hero::after { content:''; position:absolute; left:0; right:0; bottom:0; height:110px; z-index:2;
-    background:linear-gradient(to bottom, rgba(255,255,255,0), #fff); }
   .kt-div { position:absolute; top:722px; left:0; right:0; display:flex; align-items:center; gap:30px; }
   .kt-div::before, .kt-div::after { content:''; flex:1; height:3px; background:#1b1b1b; }
   .kt-div span { font-size:calc(42px * var(--kfs,1)); font-weight:700; color:#1b1b1b; letter-spacing:3px; }
@@ -501,6 +510,13 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
 
   <!-- ===== 미리보기 ===== -->
   <div class="stage" id="stage">
+    <div class="pv-zoom">
+      <span>🔍 미리보기 크기</span>
+      <button onclick="pvZoomStep(-10)">－</button>
+      <b id="pvZoomVal">100%</b>
+      <button onclick="pvZoomStep(10)">＋</button>
+      <button class="fitb" onclick="pvZoomSet(100)">화면맞춤</button>
+    </div>
     <div class="kr-only" style="width:100%;display:flex;flex-direction:column;align-items:center">
       <div class="pv-label">① 상단 메인 프로필 (1920 × 1785)</div>
       <div class="zoomWrap" data-w="1920"><div id="pageKTop"></div></div>
@@ -1029,19 +1045,29 @@ function renderActive(){ if(mode==='kr') renderKr(); else renderOv(); }
   .forEach(id => $(id).addEventListener('input', renderOv));
 
 /* ================= preview zoom ================= */
+let pvZoom = 100;
+function pvZoomStep(d){ pvZoomSet(Math.max(40, Math.min(300, pvZoom + d))); }
+function pvZoomSet(v){
+  pvZoom = v;
+  $('pvZoomVal').textContent = v + '%';
+  fitZoom();
+}
 function fitZoom(){
   const stage = $('stage');
   const avail = stage.clientWidth - 40;
+  let overflow = false;
   document.querySelectorAll('.zoomWrap').forEach(wrap => {
     if(wrap.closest('[hidden]')) return;
     const w = parseInt(wrap.dataset.w, 10);
     const maxS = wrap.dataset.max ? parseFloat(wrap.dataset.max) : 1;
-    const scale = Math.min(maxS, avail/w);
+    const scale = Math.min(maxS, avail/w) * (pvZoom/100);
+    if(w * scale > avail) overflow = true;
     wrap.style.transform = `scale(${scale})`;
     const inner = wrap.firstElementChild;
     wrap.style.height = (inner.offsetHeight * scale) + 'px';
     wrap.style.width = (w * scale) + 'px';
   });
+  stage.classList.toggle('zoomed', overflow);
 }
 window.addEventListener('resize', fitZoom);
 
