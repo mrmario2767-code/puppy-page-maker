@@ -314,7 +314,7 @@
     <!-- ===== 국내 폼 ===== -->
     <div class="kr-only">
       <div class="sec">
-        <h3>🐶 강아지 정보 <span style="font-weight:500;color:#aaa;font-size:11px">— 한글로 적으면 영문 자동</span></h3>
+        <h3><span id="pet-info-title">🐶 강아지 정보</span> <span style="font-weight:500;color:#aaa;font-size:11px">— 한글로 적으면 영문 자동</span></h3>
         <div class="row">
           <div class="field"><label>이름 (한글)</label><input id="k-name" value="우리"></div>
           <div class="field"><label>이름 영문 (자동)</label><input id="k-name-en" class="auto-en" value="WOORI"></div>
@@ -337,7 +337,7 @@
           <div class="field"><label>나이</label><input id="k-age" value="2개월령"></div>
           <div class="field"><label>나이 영문 (자동)</label><input id="k-age-en" class="auto-en" value="2MONTHS"></div>
         </div>
-        <div class="row">
+        <div class="row" id="row-blood">
           <div class="field"><label>혈통</label><input id="k-blood" value="하이브리드"></div>
           <div class="field"><label>혈통 영문 (자동)</label><input id="k-blood-en" class="auto-en" value="HYBRID"></div>
         </div>
@@ -528,9 +528,9 @@ function dk(){ return mode === 'cat' ? 'cat' : 'kr'; }
 const KR_FIELDS = ['k-name','k-name-en','k-breed','k-breed-en','k-gender','k-gender-en','k-color','k-color-en','k-age','k-age-en','k-blood','k-blood-en','k-branch'];
 const domState = {
   kr: null,
-  cat: { 'k-name':'코코','k-name-en':'COCO','k-breed':'코숏','k-breed-en':'KOREAN SHORTHAIR',
-         'k-gender':'남아','k-gender-en':'MALE','k-color':'크림','k-color-en':'CREAM',
-         'k-age':'2개월령','k-age-en':'2MONTHS','k-blood':'하이브리드','k-blood-en':'HYBRID','k-branch':'' }
+  cat: { 'k-name':'코코','k-name-en':'COCO','k-breed':'먼치킨','k-breed-en':'MUNCHKIN',
+         'k-gender':'남아','k-gender-en':'MALE','k-color':'블루바이','k-color-en':'BLUE BICOLOR',
+         'k-age':'2개월령','k-age-en':'2MONTHS','k-blood':'','k-blood-en':'','k-branch':'' }
 };
 function saveDom(m){
   if(m !== 'kr' && m !== 'cat') return;
@@ -554,6 +554,8 @@ function setMode(m){
     loadDom(m);
     $('lbl-breed').textContent = m==='cat' ? '묘종' : '견종';
     $('lbl-breed-en').textContent = m==='cat' ? '묘종 영문 (자동)' : '견종 영문 (자동)';
+    $('pet-info-title').textContent = m==='cat' ? '🐱 고양이 정보' : '🐶 강아지 정보';
+    $('row-blood').hidden = (m === 'cat');
   }
   renderSlots(); renderActive();
   if(m === 'ov') renderMainRow();
@@ -803,7 +805,8 @@ const BREED_EN = { '말티푸':'MALTIPOO','말티즈':'MALTESE','푸들':'POODLE
   '하이랜드폴드':'HIGHLAND FOLD','네벨룽':'NEBELUNG','소말리':'SOMALI','싱가푸라':'SINGAPURA','통키니즈':'TONKINESE' };
 const COLOR_EN = { '크림':'CREAM','화이트':'WHITE','흰색':'WHITE','블랙':'BLACK','검정':'BLACK','브라운':'BROWN','갈색':'BROWN','초코':'CHOCO',
   '세이블':'SABLE','아프리콧':'APRICOT','살구':'APRICOT','레드':'RED','실버':'SILVER','그레이':'GRAY','회색':'GRAY','골드':'GOLD',
-  '베이지':'BEIGE','오렌지':'ORANGE','블랙탄':'BLACK&TAN','트라이':'TRI','파티':'PARTI','크림화이트':'CREAM WHITE' };
+  '베이지':'BEIGE','오렌지':'ORANGE','블랙탄':'BLACK&TAN','트라이':'TRI','파티':'PARTI','크림화이트':'CREAM WHITE',
+  '블루':'BLUE','블루바이':'BLUE BICOLOR','블루바이컬러':'BLUE BICOLOR','크림바이':'CREAM BICOLOR','실버태비':'SILVER TABBY','브라운태비':'BROWN TABBY','태비':'TABBY','포인트':'POINT','블루포인트':'BLUE POINT','씰포인트':'SEAL POINT','캘리코':'CALICO','턱시도':'TUXEDO','치즈':'CHEESE TABBY','고등어':'MACKEREL TABBY','삼색':'CALICO' };
 const BLOOD_EN = { '하이브리드':'HYBRID','순종':'PUREBRED','믹스':'MIX','믹스견':'MIX' };
 function ageEn(kr){
   let m;
@@ -863,7 +866,7 @@ function renderKr(){
       <div class="kp-row"><span class="kp-k">성별</span><span class="kp-v">${d.gender}</span><span class="kp-e">| ${d.genderEn}</span></div>
       <div class="kp-row"><span class="kp-k">모색</span><span class="kp-v">${d.color}</span><span class="kp-e">| ${d.colorEn}</span></div>
       <div class="kp-row"><span class="kp-k">나이</span><span class="kp-v">${d.age}</span><span class="kp-e">| ${d.ageEn}</span></div>
-      <div class="kp-row"><span class="kp-k">혈통</span><span class="kp-v">${d.blood}</span><span class="kp-e">| ${d.bloodEn}</span></div>
+      ${mode==='cat' ? '' : `<div class="kp-row"><span class="kp-k">혈통</span><span class="kp-v">${d.blood}</span><span class="kp-e">| ${d.bloodEn}</span></div>`}
       <div class="kp-health-k">건강기록</div>
       <div class="kp-health">종합백신1차, 종합건강검진2회<br>원·구충2회, 프론트라인1회</div>
       <div class="kp-fee"><span class="kp-k">입양비</span><span class="kp-v2">상담문의</span><span class="kp-v3">(카드할부가능)</span></div>
