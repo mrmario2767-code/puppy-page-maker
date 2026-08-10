@@ -341,6 +341,17 @@
           <div class="field"><label>혈통</label><input id="k-blood" value="하이브리드"></div>
           <div class="field"><label>혈통 영문 (자동)</label><input id="k-blood-en" class="auto-en" value="HYBRID"></div>
         </div>
+        <div class="row">
+          <div class="field"><label>지점 (선택하면 연락처 자동 입력)</label>
+            <select id="k-branch">
+              <option value="">지점 선택</option>
+              <option value="인천본점|1670-2699">인천본점 : 1670-2699</option>
+              <option value="시흥지점|031-503-1633">시흥지점 : 031-503-1633</option>
+              <option value="용인지점|010-4339-2699">용인지점 : 010-4339-2699</option>
+              <option value="위례지점|010-9640-2699">위례지점 : 010-9640-2699</option>
+            </select>
+          </div>
+        </div>
         <div class="hint" style="text-align:left">건강기록·입양비·인천점 연락처·영업안내는 고정 문구로 자동 삽입돼요.</div>
       </div>
 
@@ -514,12 +525,12 @@ const $ = id => document.getElementById(id);
 
 /* ================= mode ================= */
 function dk(){ return mode === 'cat' ? 'cat' : 'kr'; }
-const KR_FIELDS = ['k-name','k-name-en','k-breed','k-breed-en','k-gender','k-gender-en','k-color','k-color-en','k-age','k-age-en','k-blood','k-blood-en'];
+const KR_FIELDS = ['k-name','k-name-en','k-breed','k-breed-en','k-gender','k-gender-en','k-color','k-color-en','k-age','k-age-en','k-blood','k-blood-en','k-branch'];
 const domState = {
   kr: null,
   cat: { 'k-name':'코코','k-name-en':'COCO','k-breed':'코숏','k-breed-en':'KOREAN SHORTHAIR',
          'k-gender':'남아','k-gender-en':'MALE','k-color':'크림','k-color-en':'CREAM',
-         'k-age':'2개월령','k-age-en':'2MONTHS','k-blood':'하이브리드','k-blood-en':'HYBRID' }
+         'k-age':'2개월령','k-age-en':'2MONTHS','k-blood':'하이브리드','k-blood-en':'HYBRID','k-branch':'' }
 };
 function saveDom(m){
   if(m !== 'kr' && m !== 'cat') return;
@@ -811,7 +822,7 @@ $('k-color').addEventListener('input', () => { $('k-color-en').value = dictEn(CO
 $('k-age').addEventListener('input',   () => { $('k-age-en').value = ageEn($('k-age').value); renderKr(); });
 $('k-blood').addEventListener('input', () => { $('k-blood-en').value = dictEn(BLOOD_EN, $('k-blood').value); renderKr(); });
 $('k-gender').addEventListener('input', () => { $('k-gender-en').value = ($('k-gender').value === '남아') ? 'MALE' : 'FEMALE'; renderKr(); });
-['k-name-en','k-breed-en','k-color-en','k-age-en','k-blood-en','k-gender-en'].forEach(id => $(id).addEventListener('input', renderKr));
+['k-name-en','k-breed-en','k-color-en','k-age-en','k-blood-en','k-gender-en','k-branch'].forEach(id => $(id).addEventListener('input', renderKr));
 
 /* ================= 국내 렌더 ================= */
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -826,6 +837,9 @@ function kimg(cls, i){
 
 function renderKr(){
   if(mode !== 'kr' && mode !== 'cat') return;
+  const bv = $('k-branch').value;
+  const bname = bv ? esc(bv.split('|')[0]) : '지점 선택';
+  const btel  = bv ? esc(bv.split('|')[1]) : '─';
   const nameEn = esc($('k-name-en').value.trim() || 'WOORI');
   const nameKr = esc($('k-name').value.trim() || '이름');
   const d = {
@@ -853,7 +867,7 @@ function renderKr(){
       <div class="kp-health-k">건강기록</div>
       <div class="kp-health">종합백신1차, 종합건강검진2회<br>원·구충2회, 프론트라인1회</div>
       <div class="kp-fee"><span class="kp-k">입양비</span><span class="kp-v2">상담문의</span><span class="kp-v3">(카드할부가능)</span></div>
-      <div class="kp-tel">인천점 | 1670-2699</div>
+      <div class="kp-tel">${bname} | ${btel}</div>
       <div class="kp-open">365일 정상영업</div>
       <div class="kp-open-t">(AM10:00~PM21:00)</div>
       <div class="kp-open-s">방문예약시 24시 상담가능</div>
@@ -868,7 +882,7 @@ function renderKr(){
         <div class="kb-brand-s">KOREA TEACUP PUPPY &amp; KITTEN</div>
         <span class="kb-name-en" id="kbEn">${nameEn}</span>
         <div class="kb-name-kr" id="kbKr"></div>
-        <div class="kb-tel">인천점 | 1670-2699</div>
+        <div class="kb-tel">${bname} | ${btel}</div>
         <div class="kb-tel-s">365일 24시간 상담가능</div>
       </div>
     </div>
@@ -1031,11 +1045,13 @@ function downloadKr(part){
   const name = ($('k-name-en').value || 'PET').trim().toLowerCase().replace(/\s+/g,'-');
   const pfx = mode === 'cat' ? 'cat' : 'kr';
   if(part === 'top'){
+    if(!$('k-branch').value) return flashBtn($('dlKTop'), '⚠ 지점을 먼저 선택해주세요');
     const miss = missing(dk(), [0,1]);
     if(miss.length) return flashBtn($('dlKTop'), '⚠ 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
     return exportEl($('pageKTop'), 1, `${pfx}_top_${name}.png`, $('dlKTop'));
   }
   if(part === 'bot'){
+    if(!$('k-branch').value) return flashBtn($('dlKBot'), '⚠ 지점을 먼저 선택해주세요');
     const miss = missing(dk(), [2,3,4,5]);
     if(miss.length) return flashBtn($('dlKBot'), '⚠ 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
     return exportEl($('pageKBot'), 1, `${pfx}_bottom_${name}.png`, $('dlKBot'));
