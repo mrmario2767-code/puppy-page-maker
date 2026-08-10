@@ -171,79 +171,37 @@
   [hidden] { display:none !important; }
 
   /* =========================================================
-     해외 DETAIL PAGE (output)
+     해외 DETAIL PAGE (output) — 원본 800×4681 픽셀 고정
      ========================================================= */
-  #page { font-family: Georgia, 'Times New Roman', serif; }
-  .pg-photo { width:100%; display:block; }
-  .ph-placeholder {
-    width:100%; display:flex; align-items:center; justify-content:center;
-    font-size:calc(60px * var(--fs,1)); color:#c9bfae;
-  }
-
-  .th-gold { background:#ffffff; color:#4a4438; }
-  .th-gold .pp-no { font-family:'Apple SD Gothic Neo',sans-serif; font-weight:700; font-size:calc(15px * var(--fs,1)); letter-spacing:1px; color:#3a352c; padding:34px 40px 0; }
-  .th-gold .pp-head { text-align:center; padding:64px 0 56px; }
-  .th-gold .pp-name { font-size:calc(44px * var(--fs,1)); letter-spacing:14px; color:#8a7040; text-indent:14px; }
-  .th-gold .pp-breed { font-size:calc(20px * var(--fs,1)); letter-spacing:8px; color:#5c5546; margin-top:10px; text-indent:8px; }
-  .th-gold .pp-rule { width:56px; height:1px; background:#c9a86a; margin:22px auto 0; }
-  .th-gold .sec-title { text-align:center; font-size:calc(24px * var(--fs,1)); letter-spacing:5px; color:#c9a86a; font-weight:700; padding:64px 0 34px; text-indent:5px; }
-  .th-gold .info-list { text-align:center; font-size:calc(19px * var(--fs,1)); line-height:2.15; color:#3f3a30; padding-bottom:64px; font-family:'Apple SD Gothic Neo',sans-serif; }
-  .th-gold .info-list b { font-weight:600; }
-  .th-gold .pp-desc { text-align:center; font-size:calc(17.5px * var(--fs,1)); line-height:1.85; color:#4a4438; padding:70px 70px 60px; }
-  .th-gold .pp-desc p + p { margin-top:26px; }
-  .th-gold .contact { padding: 6px 90px 76px; }
-  .th-gold .c-btn { border:1.5px solid #d8bd8a; border-radius:16px; text-align:center; padding:16px 10px 14px; margin-top:18px; }
-  .th-gold .c-label { font-size:calc(15px * var(--fs,1)); letter-spacing:2px; color:#c9a86a; font-weight:700; font-family:'Apple SD Gothic Neo',sans-serif; }
-  .th-gold .c-value { font-size:calc(17px * var(--fs,1)); color:#4a4438; margin-top:4px; }
-  .th-gold .gap { height:14px; background:#fff; }
-  .th-gold .ph-placeholder { background:#f6f2ea; }
-  .th-gold .pp-footer { text-align:center; padding:46px 0 52px; font-size:calc(13px * var(--fs,1)); letter-spacing:4px; color:#b9a373; }
-
-  .th-pink { background:#fff6f4; color:#6b5a58; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
-  .th-pink .pp-no { font-weight:700; font-size:calc(14px * var(--fs,1)); letter-spacing:1px; color:#d98f99; padding:30px 36px 0; }
-  .th-pink .pp-head { text-align:center; padding:52px 0 44px; }
-  .th-pink .pp-deco { font-size:calc(20px * var(--fs,1)); color:#f0b6bd; letter-spacing:6px; }
-  .th-pink .pp-name { font-size:calc(46px * var(--fs,1)); font-weight:800; letter-spacing:10px; color:#e0959e; text-indent:10px; margin-top:10px; }
-  .th-pink .pp-breed { font-size:calc(17px * var(--fs,1)); letter-spacing:6px; color:#a58a8d; margin-top:12px; text-indent:6px; font-weight:600; }
-  .th-pink .photo-card { margin:0 34px; border-radius:28px; overflow:hidden; box-shadow:0 10px 30px rgba(224,149,158,.18); background:#fff; }
-  .th-pink .sec-title { text-align:center; font-size:calc(22px * var(--fs,1)); letter-spacing:4px; color:#e0959e; font-weight:800; padding:58px 0 30px; text-indent:4px; }
-  .th-pink .info-card {
-    margin:0 70px 58px; background:#fff; border-radius:24px; padding:30px 20px;
-    text-align:center; font-size:calc(18px * var(--fs,1)); line-height:2.1; color:#6b5a58;
-    box-shadow:0 8px 24px rgba(224,149,158,.13);
-  }
-  .th-pink .info-card b { color:#d98f99; font-weight:700; }
-  .th-pink .pp-desc { text-align:center; font-size:calc(16.5px * var(--fs,1)); line-height:1.9; color:#7a6866; padding:62px 76px 54px; }
-  .th-pink .pp-desc p + p { margin-top:24px; }
-  .th-pink .contact { padding:4px 90px 66px; }
-  .th-pink .c-btn { background:#fff; border-radius:999px; text-align:center; padding:16px 10px 14px; margin-top:16px; box-shadow:0 6px 18px rgba(224,149,158,.16); }
-  .th-pink .c-label { font-size:calc(14px * var(--fs,1)); letter-spacing:2px; color:#e0959e; font-weight:800; }
-  .th-pink .c-value { font-size:calc(16px * var(--fs,1)); color:#6b5a58; margin-top:3px; }
-  .th-pink .gap { height:22px; }
-  .th-pink .ph-placeholder { background:#fdeae8; }
-  .th-pink .pp-footer { text-align:center; padding:40px 0 48px; font-size:calc(13px * var(--fs,1)); letter-spacing:3px; color:#dfa8ae; font-weight:700; }
-
-  .th-warm { background:#f6f1e9; color:#4b3e30; }
-  .th-warm .pp-no { font-family:'Apple SD Gothic Neo',sans-serif; font-weight:700; font-size:calc(13px * var(--fs,1)); letter-spacing:3px; color:#8a7358; padding:34px 44px 0; }
-  .th-warm .pp-head { padding:60px 64px 50px; }
-  .th-warm .pp-name { font-size:calc(58px * var(--fs,1)); letter-spacing:4px; color:#5d4a35; line-height:1.05; }
-  .th-warm .pp-breed { font-size:calc(16px * var(--fs,1)); letter-spacing:8px; color:#9a815f; margin-top:16px; font-family:'Apple SD Gothic Neo',sans-serif; font-weight:600; text-transform:uppercase; }
-  .th-warm .pp-rule { width:100%; height:1px; background:#d9cbb4; margin-top:38px; }
-  .th-warm .sec-title { font-size:calc(15px * var(--fs,1)); letter-spacing:6px; color:#9a815f; font-weight:700; padding:60px 64px 26px; font-family:'Apple SD Gothic Neo',sans-serif; }
-  .th-warm .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#d9cbb4; margin:0 64px 62px; border:1px solid #d9cbb4; }
-  .th-warm .ig-cell { background:#faf6ef; padding:20px 22px; }
-  .th-warm .ig-k { font-size:calc(11.5px * var(--fs,1)); letter-spacing:2px; color:#9a815f; font-family:'Apple SD Gothic Neo',sans-serif; font-weight:700; }
-  .th-warm .ig-v { font-size:calc(20px * var(--fs,1)); color:#4b3e30; margin-top:6px; }
-  .th-warm .pp-desc { font-size:calc(18px * var(--fs,1)); line-height:2.0; color:#5a4c3b; padding:64px 84px 58px; }
-  .th-warm .pp-desc p + p { margin-top:26px; }
-  .th-warm .pp-desc p:first-child::first-letter { font-size:calc(34px * var(--fs,1)); color:#8a7358; }
-  .th-warm .contact { padding:2px 64px 70px; }
-  .th-warm .c-btn { border-top:1px solid #c9b89a; padding:18px 4px 4px; margin-top:18px; display:flex; justify-content:space-between; align-items:baseline; }
-  .th-warm .c-label { font-size:calc(13px * var(--fs,1)); letter-spacing:3px; color:#9a815f; font-weight:700; font-family:'Apple SD Gothic Neo',sans-serif; }
-  .th-warm .c-value { font-size:calc(18px * var(--fs,1)); color:#4b3e30; }
-  .th-warm .gap { height:18px; }
-  .th-warm .ph-placeholder { background:#ece4d6; }
-  .th-warm .pp-footer { text-align:center; padding:44px 0 50px; font-size:calc(12px * var(--fs,1)); letter-spacing:5px; color:#a58f6d; }
+  #page { position:relative; width:800px; height:4681px; background:#fff;
+    font-family: Georgia, 'Times New Roman', serif; color:#4a4438; }
+  .ov-no { position:absolute; left:45px; top:42px; font-family:'Apple SD Gothic Neo',sans-serif;
+    font-weight:700; font-size:calc(29px * var(--fs,1)); letter-spacing:1px; color:#3a352c; }
+  .ov-name { position:absolute; top:282px; left:0; right:0; text-align:center;
+    font-size:calc(56px * var(--fs,1)); letter-spacing:16px; text-indent:16px; color:#c9a86a; }
+  .ov-breed { position:absolute; top:344px; left:0; right:0; text-align:center;
+    font-size:calc(34px * var(--fs,1)); letter-spacing:22px; text-indent:22px; color:#4a4438; text-transform:uppercase; }
+  .ov-intro { position:absolute; top:1534px; left:0; right:0; text-align:center; font-weight:700;
+    font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    font-size:calc(34px * var(--fs,1)); letter-spacing:6px; text-indent:6px; color:#c9a86a; }
+  .ov-info { position:absolute; top:1652px; left:0; right:0; text-align:center;
+    font-family:'Apple SD Gothic Neo',sans-serif;
+    font-size:calc(33px * var(--fs,1)); line-height:calc(59px * var(--fs,1)); color:#3f3a30; }
+  .ov-info b { font-weight:600; }
+  .ov-desc { position:absolute; top:2650px; left:50px; right:50px; text-align:center;
+    font-size:calc(23px * var(--fs,1)); line-height:1.6; color:#4a4438; }
+  .ov-desc p + p { margin-top:20px; }
+  .ov-btn { position:absolute; left:102px; width:596px; height:118px;
+    border:1.5px solid #d8bd8a; border-radius:18px; text-align:center; }
+  .ov-btn1 { top:3143px; }
+  .ov-btn2 { top:3287px; }
+  .ov-btn .c-label { margin-top:22px; font-size:calc(23px * var(--fs,1)); letter-spacing:3px; color:#c9a86a;
+    font-weight:700; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
+  .ov-btn .c-value { font-size:calc(22px * var(--fs,1)); color:#4a4438; margin-top:7px; }
+  .ov-p1 { left:0; top:441px; width:800px; height:755px; }
+  .ov-p2 { left:0; top:2055px; width:800px; height:519px; }
+  .ov-p3 { left:0; top:3508px; width:800px; height:519px; }
+  .ov-p4 { left:0; top:4090px; width:800px; height:519px; }
 
   /* =========================================================
      국내 DETAIL PAGE (output) — 픽셀 고정 레이아웃
@@ -395,21 +353,6 @@
     <!-- ===== 해외 폼 ===== -->
     <div class="ov-only" hidden>
       <div class="sec">
-        <h3>🎨 디자인 테마</h3>
-        <div class="themes">
-          <div class="theme-btn active" data-theme="gold" onclick="setTheme('gold')">
-            <div class="swatch sw-gold"></div><div class="name">아이보리 골드</div>
-          </div>
-          <div class="theme-btn" data-theme="pink" onclick="setTheme('pink')">
-            <div class="swatch sw-pink"></div><div class="name">파스텔 러블리</div>
-          </div>
-          <div class="theme-btn" data-theme="warm" onclick="setTheme('warm')">
-            <div class="swatch sw-warm"></div><div class="name">모던 웜</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="sec">
         <h3>🐶 강아지 정보</h3>
         <div class="row">
           <div class="field"><label>Puppy No.</label><input id="f-no" value="0001"></div>
@@ -483,19 +426,25 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
       <div class="sec">
         <h3>🔠 글자 크기</h3>
         <div style="display:flex;align-items:center;gap:10px">
-          <input type="range" id="f-fs" min="80" max="160" value="115" style="flex:1;accent-color:#c9a86a">
-          <b id="fs-val" style="font-size:13px;color:#8a7040;min-width:42px;text-align:right">115%</b>
+          <input type="range" id="f-fs" min="80" max="160" value="100" style="flex:1;accent-color:#c9a86a">
+          <b id="fs-val" style="font-size:13px;color:#8a7040;min-width:42px;text-align:right">100%</b>
         </div>
-        <div class="hint" style="text-align:left">기존 PSD 느낌과 비슷하게 하려면 115~130% 추천</div>
+        <div class="hint" style="text-align:left">100%가 원본 디자인 그대로예요. 필요할 때만 조절하세요.</div>
       </div>
 
       <div class="sec">
         <h3>📞 연락처</h3>
         <div class="field" style="margin-bottom:8px"><label>인스타그램</label><input id="f-insta" value="@youandmepuppy.daily"></div>
-        <div class="field"><label>왓츠앱</label><input id="f-wa" value="+82 10 0000 0000"></div>
+        <div class="field"><label>왓츠앱 (선택하거나 직접 입력)</label>
+          <input id="f-wa" list="wa-presets" value="+82 10 4464 7122">
+          <datalist id="wa-presets">
+            <option value="+82 10 4464 7122"></option>
+            <option value="+82 10 0000 0000"></option>
+          </datalist>
+        </div>
       </div>
 
-      <button class="dl-btn" id="dl" onclick="downloadOv()">⬇ 상세페이지 PNG 다운로드</button>
+      <button class="dl-btn" id="dl" onclick="downloadOv()">⬇ 상세페이지 PNG (800×4681)</button>
       <button class="dl-btn" style="margin-top:10px" id="dlMain" onclick="downloadMain()">⬇ 메인 이미지 PNG 4장 (750×750)</button>
       <div class="hint">다운로드한 PNG를 아임웹 상품 상세설명에 그대로 올리면 끝!</div>
     </div>
@@ -529,7 +478,7 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
       <div class="pv-label">메인 이미지 (750×750) × 4</div>
       <div id="mainRow" style="display:flex;gap:12px;margin-bottom:6px"></div>
       <div class="pv-label">해외 상세페이지 미리보기</div>
-      <div class="zoomWrap" data-w="880"><div id="page" class="th-gold"></div></div>
+      <div class="zoomWrap" data-w="800"><div id="page"></div></div>
     </div>
   </div>
 </div>
@@ -555,7 +504,6 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
 <script>
 /* ================= state ================= */
 let mode = 'kr';
-let theme = 'gold';
 const PH = { ov: [], kr: [], ovMain: [] };
 
 const $ = id => document.getElementById(id);
@@ -581,9 +529,12 @@ const KR_SLOTS = [
   { w:1492, h:847,  name:'하단 4' },
   { w:540,  h:766,  name:'새홈 프로필 (540×766)' },
 ];
+const OV_SLOTS = [
+  { w:800, h:755 }, { w:800, h:519 }, { w:800, h:519 }, { w:800, h:519 },
+];
 function frameDims(m, i){
   if(m === 'kr') return KR_SLOTS[Math.min(i, KR_SLOTS.length-1)];
-  return i >= 2 ? {w:880, h:660} : {w:880, h:924};
+  return OV_SLOTS[Math.min(i, OV_SLOTS.length-1)];
 }
 function roleName(m, i){
   if(m === 'kr') return i < KR_SLOTS.length ? KR_SLOTS[i].name : '(사용 안 함)';
@@ -668,7 +619,7 @@ function autoFitParams(im, d){
 }
 
 /* ================= 사진 슬롯 (페이지 위치별 그룹) ================= */
-const OV_SLOT_NAMES = ['① 메인 (세로)','② 중간 (세로)','③ 하단 가로 1','④ 하단 가로 2'];
+const OV_SLOT_NAMES = ['① 메인 (800×755)','② 중간 (가로)','③ 하단 가로 1','④ 하단 가로 2'];
 const CIRC = ['①','②','③','④','⑤','⑥','⑦'];
 
 function slotDims(key,i){
@@ -931,111 +882,42 @@ function spreadKr(en, kr, text){
   }
 }
 
-/* ================= 해외 렌더 ================= */
-function photoTag(i){
-  const arr = PH.ov;
-  if(arr[i]) return `<img class="pg-photo" src="${arr[i].baked||arr[i].src}">`;
-  const d = frameDims('ov', i);
-  return `<div class="ph-placeholder" style="aspect-ratio:${d.w}/${d.h}">🐶</div>`;
+/* ================= 해외 렌더 (원본 800×4681 고정) ================= */
+function ovimg(cls, i){
+  const o = PH.ov[i];
+  if(o) return `<div class="kimg ${cls}"><img src="${o.baked||o.src}"></div>`;
+  return `<div class="kimg ${cls}"><div class="kph">🐶<span>${i+1}번 사진 · ${OV_SLOT_NAMES[i]}</span></div></div>`;
 }
 function descHTML(){
   return esc($('f-desc').value).split(/\n\s*\n/).filter(p=>p.trim())
     .map(p => `<p>${p.trim().replace(/\n/g,'<br>')}</p>`).join('');
 }
-function setTheme(t){
-  theme = t;
-  document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme===t));
-  renderOv();
-}
 function renderOv(){
   if(mode !== 'ov') return;
-  const arr = PH.ov;
   const d = {
     no: esc($('f-no').value), name: esc($('f-name').value), breed: esc($('f-breed').value),
     age: esc($('f-age').value), color: esc($('f-color').value), gender: esc($('f-gender').value),
     insta: esc($('f-insta').value), wa: esc($('f-wa').value)
   };
-  const page = $('page');
-  page.className = 'th-' + theme;
-  const extra = `<div class="gap"></div>${photoTag(2)}<div class="gap"></div>${photoTag(3)}`;
-
-  if(theme === 'warm'){
-    page.innerHTML = `
-      <div class="pp-no">PUPPY NO. ${d.no}</div>
-      <div class="pp-head">
-        <div class="pp-name">${d.name}</div>
-        <div class="pp-breed">${d.breed}</div>
-        <div class="pp-rule"></div>
-      </div>
-      ${photoTag(0)}
-      <div class="sec-title">INTRODUCTION</div>
-      <div class="info-grid">
-        <div class="ig-cell"><div class="ig-k">NAME</div><div class="ig-v">${d.name}</div></div>
-        <div class="ig-cell"><div class="ig-k">BREED</div><div class="ig-v">${d.breed}</div></div>
-        <div class="ig-cell"><div class="ig-k">AGE</div><div class="ig-v">${d.age}</div></div>
-        <div class="ig-cell"><div class="ig-k">COLOR</div><div class="ig-v">${d.color}</div></div>
-        <div class="ig-cell" style="grid-column:1/3"><div class="ig-k">GENDER</div><div class="ig-v">${d.gender}</div></div>
-      </div>
-      ${photoTag(1)}
-      <div class="pp-desc">${descHTML()}</div>
-      <div class="contact">
-        <div class="c-btn"><span class="c-label">INSTAGRAM</span><span class="c-value">${d.insta}</span></div>
-        <div class="c-btn"><span class="c-label">WHATSAPP</span><span class="c-value">${d.wa}</span></div>
-      </div>
-      ${extra}
-      <div class="pp-footer">YOU &amp; ME PUPPY</div>`;
-  } else if(theme === 'pink'){
-    page.innerHTML = `
-      <div class="pp-no">PUPPY NO. ${d.no} 🐾</div>
-      <div class="pp-head">
-        <div class="pp-deco">♡ ♡ ♡</div>
-        <div class="pp-name">${d.name}</div>
-        <div class="pp-breed">${d.breed}</div>
-      </div>
-      <div class="photo-card">${photoTag(0)}</div>
-      <div class="sec-title">🎀 INTRODUCTION 🎀</div>
-      <div class="info-card">
-        <b>Name</b> : ${d.name}<br>
-        <b>Breed</b> : ${d.breed}<br>
-        <b>Age</b> : ${d.age}<br>
-        <b>Color</b> : ${d.color}<br>
-        <b>Gender</b> : ${d.gender}
-      </div>
-      <div class="photo-card">${photoTag(1)}</div>
-      <div class="pp-desc">${descHTML()}</div>
-      <div class="contact">
-        <div class="c-btn"><div class="c-label">INSTAGRAM</div><div class="c-value">${d.insta}</div></div>
-        <div class="c-btn"><div class="c-label">WHATSAPP</div><div class="c-value">${d.wa}</div></div>
-      </div>
-      <div class="gap"></div><div class="photo-card">${photoTag(2)}</div>
-      <div class="gap"></div><div class="photo-card">${photoTag(3)}</div>
-      <div class="pp-footer">♡ YOU &amp; ME PUPPY ♡</div>`;
-  } else {
-    page.innerHTML = `
-      <div class="pp-no">PUPPY NO: ${d.no}</div>
-      <div class="pp-head">
-        <div class="pp-name">${d.name}</div>
-        <div class="pp-breed">${d.breed.toUpperCase()}</div>
-        <div class="pp-rule"></div>
-      </div>
-      ${photoTag(0)}
-      <div class="sec-title">INTRODUCTION</div>
-      <div class="info-list">
-        <b>Name</b>: ${d.name}<br>
-        <b>Breed</b>: ${d.breed}<br>
-        <b>Age</b>: ${d.age}<br>
-        <b>Color</b>: ${d.color}<br>
-        <b>Gender</b>: ${d.gender}
-      </div>
-      ${photoTag(1)}
-      <div class="pp-desc">${descHTML()}</div>
-      <div class="contact">
-        <div class="c-btn"><div class="c-label">INSTAGRAM</div><div class="c-value">${d.insta}</div></div>
-        <div class="c-btn"><div class="c-label">WHATSAPP</div><div class="c-value">${d.wa}</div></div>
-      </div>
-      ${extra}
-      <div class="pp-footer">YOU &amp; ME PUPPY</div>`;
-  }
+  $('page').innerHTML = `
+    <div class="ov-no">PUPPY NO: ${d.no}</div>
+    <div class="ov-name">${d.name}</div>
+    <div class="ov-breed">${d.breed}</div>
+    ${ovimg('ov-p1', 0)}
+    <div class="ov-intro">INTRODUCTION</div>
+    <div class="ov-info">
+      Name: ${d.name}<br>
+      Breed: ${d.breed}<br>
+      Age: ${d.age}<br>
+      Color: ${d.color}<br>
+      Gender: ${d.gender}
+    </div>
+    ${ovimg('ov-p2', 1)}
+    <div class="ov-desc">${descHTML()}</div>
+    <div class="ov-btn ov-btn1"><div class="c-label">INSTAGRAM</div><div class="c-value">${d.insta}</div></div>
+    <div class="ov-btn ov-btn2"><div class="c-label">WHATSAPP</div><div class="c-value">${d.wa}</div></div>
+    ${ovimg('ov-p3', 2)}
+    ${ovimg('ov-p4', 3)}`;
   fitZoom();
 }
 
@@ -1105,7 +987,7 @@ function downloadOv(){
   const miss = missing('ov', [0,1,2,3]);
   if(miss.length) return flashBtn($('dl'), '⚠ 상세 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
   const name = ($('f-name').value || 'puppy').trim().toLowerCase().replace(/\s+/g,'-');
-  exportEl($('page'), 2, `puppy_${$('f-no').value}_${name}.png`, $('dl'));
+  exportEl($('page'), 1, `puppy_${$('f-no').value}_${name}.png`, $('dl'));
 }
 function downloadKr(part){
   const name = ($('k-name-en').value || 'PUPPY').trim().toLowerCase().replace(/\s+/g,'-');
@@ -1391,7 +1273,7 @@ kfsSlider.addEventListener('input', applyKFS);
 
 /* ================= init ================= */
 lastGenEN = $('f-desc').value;
-$('page').style.setProperty('--fs', 1.15);
+$('page').style.setProperty('--fs', 1);
 renderSlots();
 renderKr();
 renderOv();
