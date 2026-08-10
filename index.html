@@ -298,12 +298,16 @@
 
     <div class="mode-tabs">
       <div class="mode-tab active" id="tab-kr" onclick="setMode('kr')">
-        <div class="mt-big">🇰🇷 국내 홈페이지</div>
-        <div class="mt-sub">프로필+하단+새홈 3종</div>
+        <div class="mt-big">🐶 국내</div>
+        <div class="mt-sub">강아지</div>
+      </div>
+      <div class="mode-tab" id="tab-cat" onclick="setMode('cat')">
+        <div class="mt-big">🐱 국내</div>
+        <div class="mt-sub">고양이</div>
       </div>
       <div class="mode-tab" id="tab-ov" onclick="setMode('ov')">
-        <div class="mt-big">🌏 해외 홈페이지</div>
-        <div class="mt-sub">영문 상세페이지</div>
+        <div class="mt-big">🌏 해외</div>
+        <div class="mt-sub">영문 상세</div>
       </div>
     </div>
 
@@ -316,8 +320,8 @@
           <div class="field"><label>이름 영문 (자동)</label><input id="k-name-en" class="auto-en" value="WOORI"></div>
         </div>
         <div class="row">
-          <div class="field"><label>견종</label><input id="k-breed" value="말티푸"></div>
-          <div class="field"><label>견종 영문 (자동)</label><input id="k-breed-en" class="auto-en" value="MALTIPOO"></div>
+          <div class="field"><label id="lbl-breed">견종</label><input id="k-breed" value="말티푸"></div>
+          <div class="field"><label id="lbl-breed-en">견종 영문 (자동)</label><input id="k-breed-en" class="auto-en" value="MALTIPOO"></div>
         </div>
         <div class="row">
           <div class="field"><label>성별</label>
@@ -504,17 +508,42 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
 <script>
 /* ================= state ================= */
 let mode = 'kr';
-const PH = { ov: [], kr: [], ovMain: [] };
+const PH = { ov: [], kr: [], cat: [], ovMain: [] };
 
 const $ = id => document.getElementById(id);
 
 /* ================= mode ================= */
+function dk(){ return mode === 'cat' ? 'cat' : 'kr'; }
+const KR_FIELDS = ['k-name','k-name-en','k-breed','k-breed-en','k-gender','k-gender-en','k-color','k-color-en','k-age','k-age-en','k-blood','k-blood-en'];
+const domState = {
+  kr: null,
+  cat: { 'k-name':'코코','k-name-en':'COCO','k-breed':'코숏','k-breed-en':'KOREAN SHORTHAIR',
+         'k-gender':'남아','k-gender-en':'MALE','k-color':'크림','k-color-en':'CREAM',
+         'k-age':'2개월령','k-age-en':'2MONTHS','k-blood':'하이브리드','k-blood-en':'HYBRID' }
+};
+function saveDom(m){
+  if(m !== 'kr' && m !== 'cat') return;
+  const s = {}; KR_FIELDS.forEach(id => s[id] = $(id).value);
+  domState[m] = s;
+}
+function loadDom(m){
+  const s = domState[m]; if(!s) return;
+  KR_FIELDS.forEach(id => { $(id).value = s[id]; });
+}
 function setMode(m){
+  saveDom(mode);
   mode = m;
   $('tab-kr').classList.toggle('active', m==='kr');
+  $('tab-cat').classList.toggle('active', m==='cat');
   $('tab-ov').classList.toggle('active', m==='ov');
-  document.querySelectorAll('.kr-only').forEach(el => el.hidden = (m!=='kr'));
+  const dom = (m === 'kr' || m === 'cat');
+  document.querySelectorAll('.kr-only').forEach(el => el.hidden = !dom);
   document.querySelectorAll('.ov-only').forEach(el => el.hidden = (m!=='ov'));
+  if(dom){
+    loadDom(m);
+    $('lbl-breed').textContent = m==='cat' ? '묘종' : '견종';
+    $('lbl-breed-en').textContent = m==='cat' ? '묘종 영문 (자동)' : '견종 영문 (자동)';
+  }
   renderSlots(); renderActive();
   if(m === 'ov') renderMainRow();
 }
@@ -533,7 +562,7 @@ const OV_SLOTS = [
   { w:800, h:755 }, { w:800, h:519 }, { w:800, h:519 }, { w:800, h:519 },
 ];
 function frameDims(m, i){
-  if(m === 'kr') return KR_SLOTS[Math.min(i, KR_SLOTS.length-1)];
+  if(m === 'kr' || m === 'cat') return KR_SLOTS[Math.min(i, KR_SLOTS.length-1)];
   return OV_SLOTS[Math.min(i, OV_SLOTS.length-1)];
 }
 function roleName(m, i){
@@ -623,12 +652,12 @@ const OV_SLOT_NAMES = ['① 메인 (800×755)','② 중간 (가로)','③ 하단
 const CIRC = ['①','②','③','④','⑤','⑥','⑦'];
 
 function slotDims(key,i){
-  if(key === 'kr') return KR_SLOTS[i];
+  if(key === 'kr' || key === 'cat') return KR_SLOTS[i];
   if(key === 'ovMain') return MAIN_D;
   return frameDims('ov', i);
 }
 function slotName(key,i){
-  if(key === 'kr') return CIRC[i] + ' ' + KR_SLOTS[i].name;
+  if(key === 'kr' || key === 'cat') return CIRC[i] + ' ' + KR_SLOTS[i].name;
   if(key === 'ovMain') return '메인 ' + (i+1);
   return OV_SLOT_NAMES[i];
 }
@@ -640,6 +669,7 @@ function pickSlot(key,i,ev){
   $('f-slot').click();
 }
 function pickGroup(key,from,to){
+  if(key === 'kr') key = dk();
   pendingGroup = {key,from,to};
   $('f-group').click();
 }
@@ -709,7 +739,7 @@ function slotCard(key,i){
 }
 function renderSlots(){
   const groups = [
-    ['g-kr-top', 'kr', 0, 2], ['g-kr-bot', 'kr', 2, 6], ['g-kr-new', 'kr', 6, 7],
+    ['g-kr-top', dk(), 0, 2], ['g-kr-bot', dk(), 2, 6], ['g-kr-new', dk(), 6, 7],
     ['g-ov', 'ov', 0, 4], ['g-ovmain', 'ovMain', 0, 4],
   ];
   groups.forEach(([id, key, from, to]) => {
@@ -752,7 +782,14 @@ const BREED_EN = { '말티푸':'MALTIPOO','말티즈':'MALTESE','푸들':'POODLE
   '비숑':'BICHON FRISE','비숑프리제':'BICHON FRISE','시츄':'SHIH TZU','치와와':'CHIHUAHUA','요크셔테리어':'YORKSHIRE TERRIER','요키':'YORKIE',
   '프렌치불독':'FRENCH BULLDOG','불독':'BULLDOG','웰시코기':'WELSH CORGI','코기':'WELSH CORGI','골든리트리버':'GOLDEN RETRIEVER',
   '스피츠':'SPITZ','닥스훈트':'DACHSHUND','슈나우저':'SCHNAUZER','폼스키':'POMSKY','사모예드':'SAMOYED','시바견':'SHIBA INU','시바':'SHIBA INU',
-  '진돗개':'JINDO','진도':'JINDO','코카스파니엘':'COCKER SPANIEL','파피용':'PAPILLON','페키니즈':'PEKINGESE','퍼그':'PUG','보더콜리':'BORDER COLLIE' };
+  '진돗개':'JINDO','진도':'JINDO','코카스파니엘':'COCKER SPANIEL','파피용':'PAPILLON','페키니즈':'PEKINGESE','퍼그':'PUG','보더콜리':'BORDER COLLIE',
+  '코숏':'KOREAN SHORTHAIR','코리안숏헤어':'KOREAN SHORTHAIR','러시안블루':'RUSSIAN BLUE','먼치킨':'MUNCHKIN',
+  '스코티시폴드':'SCOTTISH FOLD','스코티쉬폴드':'SCOTTISH FOLD','랙돌':'RAGDOLL','래그돌':'RAGDOLL',
+  '브리티시숏헤어':'BRITISH SHORTHAIR','브숏':'BRITISH SHORTHAIR','페르시안':'PERSIAN','샴':'SIAMESE',
+  '뱅갈':'BENGAL','벵갈':'BENGAL','아비시니안':'ABYSSINIAN','노르웨이숲':'NORWEGIAN FOREST','메인쿤':'MAINE COON',
+  '터키시앙고라':'TURKISH ANGORA','앙고라':'TURKISH ANGORA','스핑크스':'SPHYNX','아메리칸숏헤어':'AMERICAN SHORTHAIR',
+  '아메숏':'AMERICAN SHORTHAIR','엑조틱':'EXOTIC','데본렉스':'DEVON REX','셀커크렉스':'SELKIRK REX',
+  '하이랜드폴드':'HIGHLAND FOLD','네벨룽':'NEBELUNG','소말리':'SOMALI','싱가푸라':'SINGAPURA','통키니즈':'TONKINESE' };
 const COLOR_EN = { '크림':'CREAM','화이트':'WHITE','흰색':'WHITE','블랙':'BLACK','검정':'BLACK','브라운':'BROWN','갈색':'BROWN','초코':'CHOCO',
   '세이블':'SABLE','아프리콧':'APRICOT','살구':'APRICOT','레드':'RED','실버':'SILVER','그레이':'GRAY','회색':'GRAY','골드':'GOLD',
   '베이지':'BEIGE','오렌지':'ORANGE','블랙탄':'BLACK&TAN','트라이':'TRI','파티':'PARTI','크림화이트':'CREAM WHITE' };
@@ -779,15 +816,16 @@ $('k-gender').addEventListener('input', () => { $('k-gender-en').value = ($('k-g
 /* ================= 국내 렌더 ================= */
 const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
+function petEmoji(){ return mode === 'cat' ? '🐱' : '🐶'; }
 function kimg(cls, i){
-  const o = PH.kr[i];
+  const o = PH[dk()][i];
   const d = KR_SLOTS[i];
   if(o) return `<div class="kimg ${cls}">${''}<img src="${o.baked||o.src}"></div>`;
-  return `<div class="kimg ${cls}"><div class="kph">🐶<span>${i+1}번 사진 · ${d.name}</span></div></div>`;
+  return `<div class="kimg ${cls}"><div class="kph">${petEmoji()}<span>${i+1}번 사진 · ${d.name}</span></div></div>`;
 }
 
 function renderKr(){
-  if(mode !== 'kr') return;
+  if(mode !== 'kr' && mode !== 'cat') return;
   const nameEn = esc($('k-name-en').value.trim() || 'WOORI');
   const nameKr = esc($('k-name').value.trim() || '이름');
   const d = {
@@ -807,7 +845,7 @@ function renderKr(){
       <div class="kp-name-wrap"><span class="kp-name-en" id="kpEn">${nameEn}</span></div>
       <div class="kp-name-kr" id="kpKr"></div>
       <div class="kp-line"></div>
-      <div class="kp-row"><span class="kp-k">견종</span><span class="kp-v">${d.breed}</span><span class="kp-e">| ${d.breedEn}</span></div>
+      <div class="kp-row"><span class="kp-k">${mode==='cat'?'묘종':'견종'}</span><span class="kp-v">${d.breed}</span><span class="kp-e">| ${d.breedEn}</span></div>
       <div class="kp-row"><span class="kp-k">성별</span><span class="kp-v">${d.gender}</span><span class="kp-e">| ${d.genderEn}</span></div>
       <div class="kp-row"><span class="kp-k">모색</span><span class="kp-v">${d.color}</span><span class="kp-e">| ${d.colorEn}</span></div>
       <div class="kp-row"><span class="kp-k">나이</span><span class="kp-v">${d.age}</span><span class="kp-e">| ${d.ageEn}</span></div>
@@ -823,8 +861,8 @@ function renderKr(){
 
   $('pageKBot').innerHTML = `
     <div style="position:absolute;left:93px;top:120px;width:1734px;height:890px">
-      ${PH.kr[2] ? `<div class="kimg" style="left:0;top:0;width:1734px;height:890px"><img src="${PH.kr[2].baked||PH.kr[2].src}"></div>`
-                 : `<div class="kimg" style="left:0;top:0;width:1734px;height:890px"><div class="kph">🐶<span>3번 사진 · 하단 1</span></div></div>`}
+      ${PH[dk()][2] ? `<div class="kimg" style="left:0;top:0;width:1734px;height:890px"><img src="${PH[dk()][2].baked||PH[dk()][2].src}"></div>`
+                 : `<div class="kimg" style="left:0;top:0;width:1734px;height:890px"><div class="kph">${petEmoji()}<span>3번 사진 · 하단 1</span></div></div>`}
       <div class="kb-card">
         <div class="kb-brand">YOU&amp;MEPET</div>
         <div class="kb-brand-s">KOREA TEACUP PUPPY &amp; KITTEN</div>
@@ -921,7 +959,7 @@ function renderOv(){
   fitZoom();
 }
 
-function renderActive(){ if(mode==='kr') renderKr(); else renderOv(); }
+function renderActive(){ if(mode==='ov') renderOv(); else renderKr(); }
 
 ['f-no','f-name','f-breed','f-age','f-color','f-gender','f-desc','f-insta','f-wa']
   .forEach(id => $(id).addEventListener('input', renderOv));
@@ -990,19 +1028,20 @@ function downloadOv(){
   exportEl($('page'), 1, `puppy_${$('f-no').value}_${name}.png`, $('dl'));
 }
 function downloadKr(part){
-  const name = ($('k-name-en').value || 'PUPPY').trim().toLowerCase().replace(/\s+/g,'-');
+  const name = ($('k-name-en').value || 'PET').trim().toLowerCase().replace(/\s+/g,'-');
+  const pfx = mode === 'cat' ? 'cat' : 'kr';
   if(part === 'top'){
-    const miss = missing('kr', [0,1]);
+    const miss = missing(dk(), [0,1]);
     if(miss.length) return flashBtn($('dlKTop'), '⚠ 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
-    return exportEl($('pageKTop'), 1, `kr_top_${name}.png`, $('dlKTop'));
+    return exportEl($('pageKTop'), 1, `${pfx}_top_${name}.png`, $('dlKTop'));
   }
   if(part === 'bot'){
-    const miss = missing('kr', [2,3,4,5]);
+    const miss = missing(dk(), [2,3,4,5]);
     if(miss.length) return flashBtn($('dlKBot'), '⚠ 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
-    return exportEl($('pageKBot'), 1, `kr_bottom_${name}.png`, $('dlKBot'));
+    return exportEl($('pageKBot'), 1, `${pfx}_bottom_${name}.png`, $('dlKBot'));
   }
   /* 새홈: 정확히 540×766 px — 원본에서 직접 크롭 */
-  const o = PH.kr[6];
+  const o = PH[dk()][6];
   const btn = $('dlKNew');
   if(!o) return flashBtn(btn, '⚠ 사진 빠짐: ⑦ 새홈 프로필');
   const d = { w:540, h:766 };
@@ -1010,7 +1049,7 @@ function downloadKr(part){
   const c = document.createElement('canvas'); c.width = 540; c.height = 766;
   c.getContext('2d').drawImage(o.img, r.sx, r.sy, r.sw, r.sh, 0, 0, 540, 766);
   const a = document.createElement('a');
-  a.download = `kr_newhome_${name}_540x766.png`;
+  a.download = `${mode==='cat'?'cat':'kr'}_newhome_${name}_540x766.png`;
   a.href = c.toDataURL('image/png');
   a.click();
 }
