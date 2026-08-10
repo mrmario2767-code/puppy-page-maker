@@ -235,8 +235,8 @@
   .kp-fee .kp-k { width:auto; margin-right:10px; }
   .kp-fee .kp-v2 { font-size:calc(18px * var(--kfs,1)); color:#8b93a0; }
   .kp-fee .kp-v3 { font-size:calc(18px * var(--kfs,1)); color:#3d454f; margin-left:5px; }
-  .kp-tel { font-size:calc(25px * var(--kfs,1)); font-weight:800; color:#2b5589; text-align:center; margin-top:34px; }
-  .kp-open { font-size:calc(27px * var(--kfs,1)); font-weight:800; color:#2b5589; text-align:center; margin-top:22px; }
+  .kp-tel { font-size:calc(25px * var(--kfs,1)); font-weight:800; color:#2b5589; text-align:center; margin-top:26px; line-height:1.4; white-space:nowrap; }
+  .kp-open { font-size:calc(27px * var(--kfs,1)); font-weight:800; color:#2b5589; text-align:center; margin-top:16px; }
   .kp-open-t { font-size:calc(18px * var(--kfs,1)); font-weight:700; color:#33475c; text-align:center; margin-top:3px; }
   .kp-open-s { font-size:calc(19px * var(--kfs,1)); color:#4a7ab5; text-align:center; margin-top:5px; font-weight:600; }
 
@@ -248,7 +248,7 @@
   .kb-brand-s { font-size:calc(10.5px * var(--kfs,1)); color:#9a9a9a; letter-spacing:1.5px; margin-top:5px; }
   .kb-name-en { display:inline-block; font-size:calc(44px * var(--kfs,1)); font-weight:600; color:#1f2933; letter-spacing:14px; margin-right:-14px; margin-top:32px; white-space:nowrap; }
   .kb-name-kr { font-size:calc(27px * var(--kfs,1)); color:#1f2933; margin-top:10px; }
-  .kb-tel { font-size:calc(21px * var(--kfs,1)); font-weight:800; color:#222; margin-top:38px; }
+  .kb-tel { font-size:calc(21px * var(--kfs,1)); font-weight:800; color:#222; margin-top:38px; white-space:nowrap; }
   .kb-tel-s { font-size:calc(15px * var(--kfs,1)); color:#8a8a8a; margin-top:9px; }
   .kb2 { left:93px; top:1222px; width:1230px; height:739px; }
   .kb2-text { position:absolute; left:1330px; top:1580px; width:520px; text-align:center; }
@@ -870,7 +870,7 @@ function renderKr(){
       <div class="kp-health-k">건강기록</div>
       <div class="kp-health">종합백신1차, 종합건강검진2회<br>원·구충2회, 프론트라인1회</div>
       <div class="kp-fee"><span class="kp-k">입양비</span><span class="kp-v2">상담문의</span><span class="kp-v3">(카드할부가능)</span></div>
-      <div class="kp-tel">${bname} | ${btel}</div>
+      <div class="kp-tel">${bname}<br>${btel}</div>
       <div class="kp-open">365일 정상영업</div>
       <div class="kp-open-t">(AM10:00~PM21:00)</div>
       <div class="kp-open-s">방문예약시 24시 상담가능</div>
