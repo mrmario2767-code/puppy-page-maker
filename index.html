@@ -587,6 +587,7 @@ function setMode(m){
     loadOv(m);
     $('lbl-ov-no').textContent = m==='ovcat' ? 'Kitten No.' : 'Puppy No.';
     $('lbl-ov-breed').textContent = m==='ovcat' ? '묘종' : '견종';
+    $('genBtn').textContent = m==='ovcat' ? '✨ 고양이 정보로 문구 자동 생성' : '✨ 강아지 정보로 문구 자동 생성';
   }
   renderSlots(); renderActive();
   if(ovm) renderMainRow();
@@ -1246,7 +1247,7 @@ async function genDesc(){
   $('f-desc').value = en;
   lastGenEN = en;
   setKoBox(ko, false);
-  btn.disabled = false; btn.textContent = '✨ 강아지 정보로 문구 자동 생성';
+  btn.disabled = false; btn.textContent = mode==='ovcat' ? '✨ 고양이 정보로 문구 자동 생성' : '✨ 강아지 정보로 문구 자동 생성';
   renderOv();
 }
 
