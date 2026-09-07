@@ -68,7 +68,7 @@
   .field input.auto-en { background:#f4f7fb; border-color:#d3deed; color:#3d5a80; }
 
   /* mode tabs */
-  .mode-tabs { display:flex; gap:8px; margin-bottom:18px; }
+  .mode-tabs { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:18px; }
   .mode-tab {
     flex:1; padding:12px 6px; border:2px solid #e5dfd3; border-radius:12px; background:#fff;
     text-align:center; cursor:pointer; transition:all .15s;
@@ -307,7 +307,11 @@
       </div>
       <div class="mode-tab" id="tab-ov" onclick="setMode('ov')">
         <div class="mt-big">🌏 해외</div>
-        <div class="mt-sub">영문 상세</div>
+        <div class="mt-sub">강아지</div>
+      </div>
+      <div class="mode-tab" id="tab-ovcat" onclick="setMode('ovcat')">
+        <div class="mt-big">🌏 해외</div>
+        <div class="mt-sub">고양이</div>
       </div>
     </div>
 
@@ -370,11 +374,11 @@
       <div class="sec">
         <h3>🐶 강아지 정보</h3>
         <div class="row">
-          <div class="field"><label>Puppy No.</label><input id="f-no" value="0001"></div>
+          <div class="field"><label id="lbl-ov-no">Puppy No.</label><input id="f-no" value="0001"></div>
           <div class="field"><label>이름 (영문)</label><input id="f-name" value="MOZZI"></div>
         </div>
         <div class="row">
-          <div class="field"><label>견종</label><input id="f-breed" value="Pomeranian"></div>
+          <div class="field"><label id="lbl-ov-breed">견종</label><input id="f-breed" value="Pomeranian"></div>
           <div class="field"><label>나이</label><input id="f-age" value="2 Months"></div>
         </div>
         <div class="row">
@@ -450,12 +454,14 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
       <div class="sec">
         <h3>📞 연락처</h3>
         <div class="field" style="margin-bottom:8px"><label>인스타그램</label><input id="f-insta" value="@youandmepuppy.daily"></div>
-        <div class="field"><label>왓츠앱 (선택하거나 직접 입력)</label>
-          <input id="f-wa" list="wa-presets" value="+82 10 4464 7122">
-          <datalist id="wa-presets">
-            <option value="+82 10 4464 7122"></option>
-            <option value="+82 10 0000 0000"></option>
-          </datalist>
+        <div class="field" style="margin-bottom:8px"><label>왓츠앱 번호 선택</label>
+          <select id="f-wa-sel">
+            <option value="+82 10 4464 7122" selected>+82 10 4464 7122</option>
+            <option value="__custom">직접 입력…</option>
+          </select>
+        </div>
+        <div class="field"><label>왓츠앱 표시 번호 (직접 수정 가능)</label>
+          <input id="f-wa" value="+82 10 4464 7122">
         </div>
       </div>
 
@@ -519,12 +525,14 @@ She adapts well to new surroundings and forms strong emotional bonds, making her
 <script>
 /* ================= state ================= */
 let mode = 'kr';
-const PH = { ov: [], kr: [], cat: [], ovMain: [] };
+const PH = { ov: [], kr: [], cat: [], ovMain: [], ovc: [], ovcMain: [] };
 
 const $ = id => document.getElementById(id);
 
 /* ================= mode ================= */
 function dk(){ return mode === 'cat' ? 'cat' : 'kr'; }
+function odk(){ return mode === 'ovcat' ? 'ovc' : 'ov'; }
+function mainKey(){ return mode === 'ovcat' ? 'ovcMain' : 'ovMain'; }
 const KR_FIELDS = ['k-name','k-name-en','k-breed','k-breed-en','k-gender','k-gender-en','k-color','k-color-en','k-age','k-age-en','k-blood','k-blood-en','k-branch'];
 const domState = {
   kr: null,
@@ -541,15 +549,33 @@ function loadDom(m){
   const s = domState[m]; if(!s) return;
   KR_FIELDS.forEach(id => { $(id).value = s[id]; });
 }
+const OV_FIELDS = ['f-no','f-name','f-breed','f-age','f-color','f-gender','f-desc','f-insta','f-wa'];
+const ovState = {
+  ov: null,
+  ovcat: { 'f-no':'0001', 'f-name':'COCO', 'f-breed':'Munchkin', 'f-age':'2 Months',
+    'f-color':'Blue Bicolor', 'f-gender':'Male', 'f-insta':'@youandmepuppy.daily', 'f-wa':'+82 10 4464 7122',
+    'f-desc':'COCO is a gentle and affectionate kitten who enjoys being close to people. Raised in a clean and caring environment, he has developed a calm temperament and a naturally friendly personality.\n\nHe adapts well to new surroundings and forms strong emotional bonds, making him a wonderful lifelong companion.' }
+};
+function saveOv(m){
+  if(m !== 'ov' && m !== 'ovcat') return;
+  const s = {}; OV_FIELDS.forEach(id => s[id] = $(id).value);
+  ovState[m] = s;
+}
+function loadOv(m){
+  const s = ovState[m]; if(!s) return;
+  OV_FIELDS.forEach(id => { $(id).value = s[id]; });
+}
 function setMode(m){
-  saveDom(mode);
+  saveDom(mode); saveOv(mode);
   mode = m;
   $('tab-kr').classList.toggle('active', m==='kr');
   $('tab-cat').classList.toggle('active', m==='cat');
   $('tab-ov').classList.toggle('active', m==='ov');
+  $('tab-ovcat').classList.toggle('active', m==='ovcat');
   const dom = (m === 'kr' || m === 'cat');
+  const ovm = (m === 'ov' || m === 'ovcat');
   document.querySelectorAll('.kr-only').forEach(el => el.hidden = !dom);
-  document.querySelectorAll('.ov-only').forEach(el => el.hidden = (m!=='ov'));
+  document.querySelectorAll('.ov-only').forEach(el => el.hidden = !ovm);
   if(dom){
     loadDom(m);
     $('lbl-breed').textContent = m==='cat' ? '묘종' : '견종';
@@ -557,8 +583,13 @@ function setMode(m){
     $('pet-info-title').textContent = m==='cat' ? '🐱 고양이 정보' : '🐶 강아지 정보';
     $('row-blood').hidden = (m === 'cat');
   }
+  if(ovm){
+    loadOv(m);
+    $('lbl-ov-no').textContent = m==='ovcat' ? 'Kitten No.' : 'Puppy No.';
+    $('lbl-ov-breed').textContent = m==='ovcat' ? '묘종' : '견종';
+  }
   renderSlots(); renderActive();
-  if(m === 'ov') renderMainRow();
+  if(ovm) renderMainRow();
 }
 
 /* ================= frame dims ================= */
@@ -666,12 +697,12 @@ const CIRC = ['①','②','③','④','⑤','⑥','⑦'];
 
 function slotDims(key,i){
   if(key === 'kr' || key === 'cat') return KR_SLOTS[i];
-  if(key === 'ovMain') return MAIN_D;
+  if(key === 'ovMain' || key === 'ovcMain') return MAIN_D;
   return frameDims('ov', i);
 }
 function slotName(key,i){
   if(key === 'kr' || key === 'cat') return CIRC[i] + ' ' + KR_SLOTS[i].name;
-  if(key === 'ovMain') return '메인 ' + (i+1);
+  if(key === 'ovMain' || key === 'ovcMain') return '메인 ' + (i+1);
   return OV_SLOT_NAMES[i];
 }
 
@@ -683,6 +714,8 @@ function pickSlot(key,i,ev){
 }
 function pickGroup(key,from,to){
   if(key === 'kr') key = dk();
+  if(key === 'ov') key = odk();
+  if(key === 'ovMain') key = mainKey();
   pendingGroup = {key,from,to};
   $('f-group').click();
 }
@@ -753,7 +786,7 @@ function slotCard(key,i){
 function renderSlots(){
   const groups = [
     ['g-kr-top', dk(), 0, 2], ['g-kr-bot', dk(), 2, 6], ['g-kr-new', dk(), 6, 7],
-    ['g-ov', 'ov', 0, 4], ['g-ovmain', 'ovMain', 0, 4],
+    ['g-ov', odk(), 0, 4], ['g-ovmain', mainKey(), 0, 4],
   ];
   groups.forEach(([id, key, from, to]) => {
     const el = $(id); if(!el) return;
@@ -939,23 +972,23 @@ function spreadKr(en, kr, text){
 
 /* ================= 해외 렌더 (원본 800×4681 고정) ================= */
 function ovimg(cls, i){
-  const o = PH.ov[i];
+  const o = PH[odk()][i];
   if(o) return `<div class="kimg ${cls}"><img src="${o.baked||o.src}"></div>`;
-  return `<div class="kimg ${cls}"><div class="kph">🐶<span>${i+1}번 사진 · ${OV_SLOT_NAMES[i]}</span></div></div>`;
+  return `<div class="kimg ${cls}"><div class="kph">${mode==='ovcat'?'🐱':'🐶'}<span>${i+1}번 사진 · ${OV_SLOT_NAMES[i]}</span></div></div>`;
 }
 function descHTML(){
   return esc($('f-desc').value).split(/\n\s*\n/).filter(p=>p.trim())
     .map(p => `<p>${p.trim().replace(/\n/g,'<br>')}</p>`).join('');
 }
 function renderOv(){
-  if(mode !== 'ov') return;
+  if(mode !== 'ov' && mode !== 'ovcat') return;
   const d = {
     no: esc($('f-no').value), name: esc($('f-name').value), breed: esc($('f-breed').value),
     age: esc($('f-age').value), color: esc($('f-color').value), gender: esc($('f-gender').value),
     insta: esc($('f-insta').value), wa: esc($('f-wa').value)
   };
   $('page').innerHTML = `
-    <div class="ov-no">PUPPY NO: ${d.no}</div>
+    <div class="ov-no">${mode==='ovcat' ? 'KITTEN' : 'PUPPY'} NO: ${d.no}</div>
     <div class="ov-name">${d.name}</div>
     <div class="ov-breed">${d.breed}</div>
     ${ovimg('ov-p1', 0)}
@@ -976,10 +1009,16 @@ function renderOv(){
   fitZoom();
 }
 
-function renderActive(){ if(mode==='ov') renderOv(); else renderKr(); }
+function renderActive(){ if(mode==='ov' || mode==='ovcat') renderOv(); else renderKr(); }
 
 ['f-no','f-name','f-breed','f-age','f-color','f-gender','f-desc','f-insta','f-wa']
   .forEach(id => $(id).addEventListener('input', renderOv));
+$('f-wa-sel').addEventListener('input', () => {
+  const v = $('f-wa-sel').value;
+  if(v === '__custom'){ $('f-wa').value = ''; $('f-wa').focus(); }
+  else $('f-wa').value = v;
+  renderOv();
+});
 
 /* ================= preview zoom ================= */
 let pvZoom = 100;
@@ -1014,7 +1053,9 @@ async function exportEl(el, scale, filename, btn){
   btn.disabled = true; btn.textContent = '이미지 만드는 중...';
   const wrap = el.closest('.zoomWrap');
   const prev = wrap.style.transform;
+  const prevShadow = el.style.boxShadow;
   wrap.style.transform = 'none';
+  el.style.boxShadow = 'none';  /* 그림자가 이미지에 회색 막으로 찍히는 것 방지 */
   try {
     const canvas = await html2canvas(el, { scale, useCORS: true, backgroundColor: '#ffffff' });
     const a = document.createElement('a');
@@ -1025,6 +1066,7 @@ async function exportEl(el, scale, filename, btn){
     console.error(e);
   } finally {
     wrap.style.transform = prev;
+    el.style.boxShadow = prevShadow;
     btn.disabled = false; btn.textContent = label;
     fitZoom();
   }
@@ -1039,10 +1081,11 @@ function flashBtn(btn, msg){
 function missing(key, idxs){ return idxs.filter(i => !PH[key][i]); }
 
 function downloadOv(){
-  const miss = missing('ov', [0,1,2,3]);
+  const miss = missing(odk(), [0,1,2,3]);
   if(miss.length) return flashBtn($('dl'), '⚠ 상세 사진 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
-  const name = ($('f-name').value || 'puppy').trim().toLowerCase().replace(/\s+/g,'-');
-  exportEl($('page'), 1, `puppy_${$('f-no').value}_${name}.png`, $('dl'));
+  const name = ($('f-name').value || 'pet').trim().toLowerCase().replace(/\s+/g,'-');
+  const pfx = mode === 'ovcat' ? 'kitten' : 'puppy';
+  exportEl($('page'), 1, `${pfx}_${$('f-no').value}_${name}.png`, $('dl'));
 }
 function downloadKr(part){
   const name = ($('k-name-en').value || 'PET').trim().toLowerCase().replace(/\s+/g,'-');
@@ -1178,8 +1221,9 @@ async function genDesc(){
   if(window.claude && typeof window.claude.complete === 'function'){
     btn.disabled = true; btn.textContent = 'AI가 문구 만드는 중...';
     try{
-      const prompt = `Write a warm, premium-feeling introduction for a puppy adoption detail page, in English.\n`
-        + `Puppy info — Name: ${$('f-name').value}, Breed: ${$('f-breed').value}, Age: ${$('f-age').value}, Color: ${$('f-color').value}, Gender: ${$('f-gender').value}.\n`
+      const animal = mode === 'ovcat' ? 'kitten' : 'puppy';
+      const prompt = `Write a warm, premium-feeling introduction for a ${animal} adoption detail page, in English.\n`
+        + `Pet info — Name: ${$('f-name').value}, Breed: ${$('f-breed').value}, Age: ${$('f-age').value}, Color: ${$('f-color').value}, Gender: ${$('f-gender').value}.\n`
         + `Rules: exactly 2 short paragraphs separated by one blank line, about 2 sentences each. Elegant boutique tone. No headings, no emojis, no quotation marks. Vary the wording creatively each time.\n`
         + `After the English text, write a line containing only [KO], then a natural Korean translation of the same text. Reply with only the text.`;
       const r = await Promise.race([
@@ -1195,6 +1239,10 @@ async function genDesc(){
     }catch(e){ /* fall back */ }
   }
   if(!en){ const r = buildDesc(); en = r.en; ko = r.ko; }
+  if(mode === 'ovcat'){
+    en = en.replace(/puppy/g, 'kitten');
+    ko = ko.replace(/반려견/g, '반려묘').replace(/아기예요/g, '아기 고양이예요');
+  }
   $('f-desc').value = en;
   lastGenEN = en;
   setKoBox(ko, false);
@@ -1213,7 +1261,7 @@ const MAIN_D = { w:750, h:750 };
 function renderMainRow(){
   const row = $('mainRow'); if(!row) return;
   row.innerHTML = [0,1,2,3].map(i => {
-    const o = PH.ovMain[i];
+    const o = PH[mainKey()][i];
     return `<div style="width:160px;height:160px;background:#f1ede6;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#c9bfae;font-size:30px;box-shadow:0 4px 16px rgba(60,45,20,.12)">${
       o ? `<img src="${o.baked||o.src}" style="width:100%;height:100%;object-fit:cover">` : (i+1)
     }</div>`;
@@ -1221,9 +1269,9 @@ function renderMainRow(){
 }
 function downloadMain(){
   const btn = $('dlMain');
-  const miss = missing('ovMain', [0,1,2,3]);
+  const miss = missing(mainKey(), [0,1,2,3]);
   if(miss.length) return flashBtn(btn, '⚠ 메인 이미지 빠짐: ' + miss.map(i=>CIRC[i]).join(' '));
-  const items = [0,1,2,3].map(i => ({o: PH.ovMain[i], i}));
+  const items = [0,1,2,3].map(i => ({o: PH[mainKey()][i], i}));
   const name = ($('f-name').value || 'puppy').trim().toLowerCase().replace(/\s+/g,'-');
   items.forEach(({o,i}, n) => {
     const r = cropRect(o, MAIN_D);
@@ -1330,6 +1378,7 @@ function applyKFS(){
 kfsSlider.addEventListener('input', applyKFS);
 
 /* ================= init ================= */
+{ const s = {}; OV_FIELDS.forEach(id => s[id] = $(id).value); ovState.ov = s; }
 lastGenEN = $('f-desc').value;
 $('page').style.setProperty('--fs', 1);
 renderSlots();
